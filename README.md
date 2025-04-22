@@ -8,11 +8,11 @@ sudo apt install openjdk-17-jdk -y <br>
 java -version  # Verify Java installation <br>
 
 ### After installing java, need to add Jenkins Repository
-sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
-  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
-  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \ <br>
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key <br>
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \ <br>
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \ <br>
+  /etc/apt/sources.list.d/jenkins.list > /dev/null <br>
 
 ### Now install Jenkins
 sudo apt update <br>
