@@ -1,0 +1,13 @@
+--> Firstly Create an EC2 Instances Master and Slave.
+
+--> Secondly Generate SSH keys and do as you do it in Ansible
+
+--> Now Add Credentials in Jenkins with username as "Ubuntu" and Private Key of "Master Server"
+
+--> Give the remote directory as "/home/ubuntu"
+
+--> Now create a Node/Agent with username as "Ubuntu" and Hostname as "public-ip-address" of Slave Server and select the credentials that we have created in above step
+
+--> Now choose "Non-Verifying Verification Strategy" in the Host Key Verification Strategy
+
+=> Now click on save and launch the agent.

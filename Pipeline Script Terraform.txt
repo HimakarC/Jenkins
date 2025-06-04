@@ -1,0 +1,50 @@
+# On EC2 instance you need to do below:
+
+$sudo visudo
+
+#Add below line to the script
+jenkins ALL=(ALL) NOPASSWD: /usr/bin/apt-get, /usr/bin/tee, /usr/bin/lsb_release, /usr/bin/apt-key, /usr/bin/add-apt-repository
+
+
+
+
+# In Jenkins Pipeline Script
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Install Terraform') {
+            steps {
+                script {
+                    // Update package list
+                    sh 'sudo apt-get update && sudo apt-get install -y gnupg software-properties-common'
+                    // Add HashiCorp's GPG key
+                    sh '''wget -O- https://apt.releases.hashicorp.com/gpg | \
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+'''
+                    sh '''gpg --no-default-keyring \
+--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+--fingerprint
+'''
+                    sh '''echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+'''
+                    sh 'sudo apt-get update'
+                    sh 'sudo apt-get install terraform'
+                }
+            }
+        }
+
+        stage('Verify Installation') {
+            steps {
+                script {
+                    // Check Terraform version
+                    sh 'terraform --version'
+                }
+            }
+        }
+    }
+}

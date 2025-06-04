@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = 'fewfregt'
+        DOCKER_CONTAINER = 'adsdasdsad'
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/HimakarC/practicing.git', branch: 'main'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def dockerImage = docker.build("${env.DOCKER_IMAGE}")
+                }
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    def dockerImage = docker.image("${env.DOCKER_IMAGE}")
+                    dockerImage.run("-d -p 8000:8000 --name ${env.DOCKER_CONTAINER}")
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                def runningContainers = sh(script: "docker ps -q --filter 'name=${env.DOCKER_CONTAINER}'", returnStdout: true).trim()
+                if (runningContainers) {
+                    sh 'echo Done'
+                }
+            }
+        }
+    }
+}
